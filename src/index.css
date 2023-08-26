@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can overwrite the Tailwind Form Plugin CSS because the Plugin css is applied to the Base layer. Futhermore, your customised css for @layer base will be written after the Plugin css and thus will overwrite it. */
+@layer base {
+  /* ************************************ FORM INPUT ********************************** */
+  body {
+    background: #f3f4f6;
+    color: #6b7280;
+    font-family: "Inter", sans-serif;
+  }
+
+  [type="text"],
+  [type="email"],
+  [type="url"],
+  [type="password"],
+  [type="number"],
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="search"],
+  [type="tel"],
+  [type="time"],
+  [type="week"],
+  [multiple],
+  textarea,
+  select {
+    @apply w-full rounded-lg border-gray-300   focus:border-green-500 focus:shadow-md  focus:ring-green-500;
+  }
+
+  [type="checkbox"] {
+    @apply h-5 w-5 rounded border-gray-300 text-green-600 shadow focus:shadow-md focus:ring-green-500;
+  }
+  /* ************************************ END - FORM INPUT ********************************** */
+
+  /* ************************************ INPUT RANGE ********************************** */
+  /* The input[type=range] element consists of two parts: thumb, track */
+
+  /* Styling the Thumb */
+  input[type="range"]::-webkit-slider-thumb {
+    @apply h-[12px] w-[12px] cursor-pointer appearance-none rounded-full bg-gray-100 shadow-black drop-shadow-lg;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    @apply h-[12px] w-[12px] cursor-pointer appearance-none rounded-full bg-gray-100 shadow-black drop-shadow-lg;
+  }
+
+  input[type="range"]::-ms-thumb {
+    @apply h-[12px] w-[12px] cursor-pointer appearance-none rounded-full bg-gray-100 shadow-black drop-shadow-lg;
+  }
+  /* *********************************** END - INPUT RANGE ******************************* */
+}
+
+/* //TODO: Be aware, the error at the end of this file is caused by all the comments you have in this file, ie. `/* *\/`. The @layer base {} does not tolerate any componets within it for some reason. */
+
+@layer components {
+  .bulet-point {
+    background: linear-gradient(225.51deg, #20ff87 11.46%, #00cc9e 84.39%);
+  }
+}
+
+@layer {
+  .react-datepicker-wrapper {
+    display: block !important;
+  }
+}
