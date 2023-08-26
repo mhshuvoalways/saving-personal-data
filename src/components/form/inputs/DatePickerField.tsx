@@ -20,7 +20,7 @@ const DatePickerField: React.FC<Props> = ({
     <div className="mt-[50px]">
       <p className="text-lg leading-7 font-normal text-black">{label}</p>
       <DatePicker
-        selected={birthDate}
+        selected={birthDate ? new Date(birthDate) : null}
         onChange={(date) =>
           setFormValues({
             ...formValues,

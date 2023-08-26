@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import FormCard from "./FormCard";
 import UserPhotoForm from "./upload";
 import PhotoExample from "./upload/PhotoExample";
@@ -8,6 +8,7 @@ import DatePickerField from "./inputs/DatePickerField";
 import Radio from "./inputs/radio";
 import Button from "./inputs/Button";
 import { personalInfo } from "../../store/features/formFeatures";
+import { RootState } from "../../store";
 
 interface FormValues {
   firstName: string;
@@ -25,6 +26,9 @@ const Index: React.FC = () => {
     gender: "Male",
   });
 
+  const firstForm = useSelector(
+    (state: RootState) => state.formFeature.firstForm as FormValues
+  );
   const dispatch = useDispatch();
 
   const onChangeForm = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +48,11 @@ const Index: React.FC = () => {
     };
     dispatch(personalInfo(obj));
   };
+
+  useEffect(() => {
+    setFormValues(firstForm);
+    setImage(firstForm.image[0])
+  }, [firstForm]);
 
   return (
     <>

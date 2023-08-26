@@ -6,7 +6,7 @@ interface Props {
 
 const FormTitle: React.FC<Props> = ({ title }) => {
   return (
-    <p className="text-2xl leading-8 font-bold text-center border-b-[3px] border-[#10B981] w-full md:w-7/12 mx-auto">
+    <p className="text-2xl leading-8 font-bold text-center border-b-[3px] border-[#10B981] w-full mx-auto">
       {title}
     </p>
   );
