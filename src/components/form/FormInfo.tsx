@@ -49,10 +49,9 @@ const Index: React.FC = () => {
     dispatch(personalInfo(obj));
   };
 
-  useEffect(() => {
-    setFormValues(firstForm);
-    setImage(firstForm.image[0])
-  }, [firstForm]);
+  // useEffect(() => {
+  //   setFormValues(firstForm);
+  // }, [firstForm]);
 
   return (
     <>
