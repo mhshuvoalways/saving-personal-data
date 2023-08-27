@@ -127,7 +127,7 @@ const Index: React.FC = () => {
           />
         </>
       </FormCard>
-      <Button btnLink="whenwhere" formSubmit={formSubmit} />
+      <Button btnLink="whenwhere" formSubmit={formSubmit} btn />
     </>
   );
 };
