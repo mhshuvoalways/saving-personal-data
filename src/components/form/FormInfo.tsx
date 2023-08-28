@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import FormCard from "./FormCard";
 import UserPhotoForm from "./upload";
 import PhotoExample from "./upload/PhotoExample";
@@ -26,6 +27,7 @@ const Index: React.FC = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onChangeForm = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
@@ -35,18 +37,21 @@ const Index: React.FC = () => {
   };
 
   const formSubmit = () => {
-    const obj = {
-      image: image,
-      firstName: formValues.firstName,
-      lastName: formValues.lastName,
-      birthDate: formValues.birthDate,
-      gender: formValues.gender,
-    };
-    dispatch(personalInfo(obj));
+    if (formValues.firstName) {
+      const obj = {
+        image: image,
+        firstName: formValues.firstName,
+        lastName: formValues.lastName,
+        birthDate: formValues.birthDate,
+        gender: formValues.gender,
+      };
+      dispatch(personalInfo(obj));
+      navigate("/personalproject");
+    }
   };
 
   return (
-    <>
+    <form>
       <FormCard>
         <>
           <UserPhotoForm image={image} setImage={setImage} />
@@ -82,7 +87,7 @@ const Index: React.FC = () => {
         </>
       </FormCard>
       <Button formSubmit={formSubmit} />
-    </>
+    </form>
   );
 };
 

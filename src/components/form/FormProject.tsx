@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import FormCard from "./FormCard";
 import FormTitle from "./FormTitle";
 import InputField from "./inputs/InputField";
@@ -29,6 +30,7 @@ const Index: React.FC = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onChangeInputForm = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
@@ -45,20 +47,28 @@ const Index: React.FC = () => {
   };
 
   const formSubmit = () => {
-    const obj = {
-      title: formValues.title,
-      shortDescription: formValues.shortDescription,
-      whoWeAre: formValues.whoWeAre,
-      goal: formValues.goal,
-      targetAudience: formValues.targetAudience,
-      whatWeDo: formValues.whatWeDo,
-      specialty: formValues.specialty,
-    };
-    dispatch(projectInfo(obj));
+    if (
+      formValues.title &&
+      formValues.shortDescription &&
+      formValues.whoWeAre &&
+      formValues.whatWeDo
+    ) {
+      const obj = {
+        title: formValues.title,
+        shortDescription: formValues.shortDescription,
+        whoWeAre: formValues.whoWeAre,
+        goal: formValues.goal,
+        targetAudience: formValues.targetAudience,
+        whatWeDo: formValues.whatWeDo,
+        specialty: formValues.specialty,
+      };
+      dispatch(projectInfo(obj));
+      navigate("/whenwhere");
+    }
   };
 
   return (
-    <>
+    <form>
       <FormCard cardWidth="w-[78%]">
         <>
           <FormTitle title="2.1 Overview Information" />
@@ -128,7 +138,7 @@ const Index: React.FC = () => {
         </>
       </FormCard>
       <Button btnLink="whenwhere" formSubmit={formSubmit} btn />
-    </>
+    </form>
   );
 };
 
