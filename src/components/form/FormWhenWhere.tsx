@@ -24,17 +24,37 @@ interface FormValues {
   other: string;
 }
 
-interface SelectFormValues {
-  firstValue: string;
-  secondValue: string;
-}
-
 interface AddressObject {
   address_components: {
     short_name: string;
     types: string[];
   }[];
 }
+
+interface SelectOption {
+  id: number;
+  name: string;
+}
+
+interface SelectValue {
+  id: number;
+  value: string;
+}
+
+const selectArray: SelectOption[] = [
+  {
+    id: 1,
+    name: "Skype",
+  },
+  {
+    id: 2,
+    name: "Google Hangouts",
+  },
+  {
+    id: 3,
+    name: "Wechat",
+  },
+];
 
 const Index: React.FC = () => {
   const [checkboxSelected, setCheckboxSelected] = useState<string[]>([]);
@@ -48,14 +68,43 @@ const Index: React.FC = () => {
     city: "",
     other: "",
   });
-  const [selectComPre, setSelectComPre] = useState<SelectFormValues>({
-    firstValue: "",
-    secondValue: "",
-  });
   const [tagItems, setTagItems] = useState<string[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectValues, setSelectValues] = useState<SelectValue[]>([
+    {
+      id: selectArray[0].id,
+      value: "",
+    },
+  ]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleSelectChange = (index: number, value: string) => {
+    const updatedValues = [...selectValues];
+    updatedValues[index].value = value;
+    setSelectValues(updatedValues);
+  
+    setSelectedOptions((prevOptions) => [...prevOptions, value]);
+    console.log('call');
+    
+  };
+  
+
+  const handleAddSelect = () => {
+    const remainingOptions = selectArray.filter(
+      (option) => !selectedOptions.includes(option.name)
+    );
+
+    if (remainingOptions.length > 0) {
+      const newSelect: SelectValue = {
+        id: selectValues.length + 1, // Use the length of selectValues array as the id
+        value: "",
+      };
+      setSelectValues([...selectValues, newSelect]);
+    }
+  };
+console.log(selectValues);
 
   const checkHandler = (value: string) => {
     const temp = [...checkboxSelected];
@@ -86,13 +135,6 @@ const Index: React.FC = () => {
     });
   };
 
-  const onChangeSelectForm = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectComPre({
-      ...selectComPre,
-      [event.target.name]: event.target.value,
-    });
-  };
-
   const onChangeGoogle = (obj: AddressObject) => {
     const postalCode = obj.address_components.find((el) =>
       el.types.includes("postal_code")
@@ -114,7 +156,6 @@ const Index: React.FC = () => {
       city: formValues.city,
       other: formValues.other,
       image,
-      selectComPre,
       tagItems,
     };
     dispatch(whenWhereInfo(obj));
@@ -201,13 +242,16 @@ const Index: React.FC = () => {
             <SelectField
               title="Communication Preferences:"
               description="What platform(s) do you use for your online meetings?"
-              formValues={selectComPre}
-              onChangeForm={onChangeSelectForm}
+              selectArray={selectArray}
+              selectedOptions={selectedOptions}
+              handleSelectChange={handleSelectChange}
+              selectValues={selectValues}
             />
           )}
           <motion.p
             className="text-base leading-6 text-[#9CA3AF] mt-[20px] cursor-pointer font-bold inline-block"
             whileTap={{ scale: 0.9 }}
+            onClick={handleAddSelect}
           >
             + Add a communication tool
           </motion.p>
