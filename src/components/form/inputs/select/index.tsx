@@ -16,7 +16,6 @@ interface Props {
   selectArray: SelectOption[];
   handleSelectChange(index: number, value: string): void;
   selectValues: SelectValue[];
-  selectedOptions: string[];
 }
 
 const Index: React.FC<Props> = ({
@@ -25,21 +24,26 @@ const Index: React.FC<Props> = ({
   selectArray,
   handleSelectChange,
   selectValues,
-  selectedOptions,
 }) => {
   return (
     <div className="mt-[50px]">
       <p className="text-lg leading-7 font-bold">{title}</p>
       <p className="text-lg leading-7 font-normal">{description}</p>
       {selectValues.map((select, index) => (
-        <select
-          key={select.id}
-          value={selectedOptions[index]}
-          onChange={(e) => handleSelectChange(index, e.target.value)}
-        >
-          {selectArray.map(
-            (el) =>
-              !selectedOptions.includes(el.name) && (
+        <div key={select.id}>
+          <select
+            value={select.value}
+            onChange={(e) => handleSelectChange(index, e.target.value)}
+          >
+            <option value="">Select an option</option>
+            {selectArray
+              .filter(
+                (el) =>
+                  !selectValues.some(
+                    (s, i) => s.value === el.name && i !== index
+                  )
+              )
+              .map((el) => (
                 <option
                   key={el.id}
                   value={el.name}
@@ -47,9 +51,9 @@ const Index: React.FC<Props> = ({
                 >
                   {el.name}
                 </option>
-              )
-          )}
-        </select>
+              ))}
+          </select>
+        </div>
       ))}
     </div>
   );

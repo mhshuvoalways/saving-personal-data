@@ -8,6 +8,7 @@ interface SelectOption {
 interface Props {
   items: SelectOption[];
   name: string;
+  handleSelectChange: { index: number; value: string };
 }
 
 const SelectField: React.FC<Props> = ({ items, name }) => {

@@ -69,7 +69,6 @@ const Index: React.FC = () => {
     other: "",
   });
   const [tagItems, setTagItems] = useState<string[]>([]);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [selectValues, setSelectValues] = useState<SelectValue[]>([
     {
       id: selectArray[0].id,
@@ -84,27 +83,21 @@ const Index: React.FC = () => {
     const updatedValues = [...selectValues];
     updatedValues[index].value = value;
     setSelectValues(updatedValues);
-  
-    setSelectedOptions((prevOptions) => [...prevOptions, value]);
-    console.log('call');
-    
   };
-  
 
   const handleAddSelect = () => {
     const remainingOptions = selectArray.filter(
-      (option) => !selectedOptions.includes(option.name)
+      (option) => !selectValues.some((select) => select.value === option.name)
     );
 
     if (remainingOptions.length > 0) {
       const newSelect: SelectValue = {
-        id: selectValues.length + 1, // Use the length of selectValues array as the id
+        id: remainingOptions[0].id,
         value: "",
       };
       setSelectValues([...selectValues, newSelect]);
     }
   };
-console.log(selectValues);
 
   const checkHandler = (value: string) => {
     const temp = [...checkboxSelected];
@@ -243,7 +236,6 @@ console.log(selectValues);
               title="Communication Preferences:"
               description="What platform(s) do you use for your online meetings?"
               selectArray={selectArray}
-              selectedOptions={selectedOptions}
               handleSelectChange={handleSelectChange}
               selectValues={selectValues}
             />
