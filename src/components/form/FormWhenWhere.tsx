@@ -8,7 +8,7 @@ import SearchInputField from "./inputs/SearchInputField";
 import TextAreaField from "./inputs/TextAreaField";
 import CheckBoxField from "./inputs/CheckBoxField";
 import InputField from "./inputs/InputField";
-import SelectField from "./inputs/select";
+import SelectField from "./inputs/SelectField";
 import PhotoForm from "./upload/PhotoForm";
 import Tags from "./tags";
 import Button from "./inputs/Button";
@@ -92,7 +92,7 @@ const Index: React.FC = () => {
 
     if (remainingOptions.length > 0) {
       const newSelect: SelectValue = {
-        id: remainingOptions[0].id,
+        id: selectValues.length + 1,
         value: "",
       };
       setSelectValues([...selectValues, newSelect]);
@@ -150,6 +150,7 @@ const Index: React.FC = () => {
       other: formValues.other,
       image,
       tagItems,
+      selectValues,
     };
     dispatch(whenWhereInfo(obj));
     navigate("/");
@@ -232,21 +233,23 @@ const Index: React.FC = () => {
             </>
           )}
           {checkboxSelected.includes("online") && (
-            <SelectField
-              title="Communication Preferences:"
-              description="What platform(s) do you use for your online meetings?"
-              selectArray={selectArray}
-              handleSelectChange={handleSelectChange}
-              selectValues={selectValues}
-            />
+            <>
+              <SelectField
+                title="Communication Preferences:"
+                description="What platform(s) do you use for your online meetings?"
+                selectArray={selectArray}
+                handleSelectChange={handleSelectChange}
+                selectValues={selectValues}
+              />
+              <motion.p
+                className="text-base leading-6 text-[#9CA3AF] mt-[20px] cursor-pointer font-bold inline-block"
+                whileTap={{ scale: 0.9 }}
+                onClick={handleAddSelect}
+              >
+                + Add a communication tool
+              </motion.p>
+            </>
           )}
-          <motion.p
-            className="text-base leading-6 text-[#9CA3AF] mt-[20px] cursor-pointer font-bold inline-block"
-            whileTap={{ scale: 0.9 }}
-            onClick={handleAddSelect}
-          >
-            + Add a communication tool
-          </motion.p>
         </>
       </FormCard>
       <FormCard cardWidth="w-[78%]">

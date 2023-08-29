@@ -44,7 +44,7 @@ const BulletPoint: React.FC = () => {
               1
             </p>
           </Link>
-          <Link to="/personalproject">
+          <Link to={count.secondForm && "/personalproject"}>
             <p
               className={`w-9 h-[34px] rounded-full text-base leading-6 font-bold text-white flex justify-center items-center ${
                 Object.entries(count.secondForm).length
@@ -55,7 +55,7 @@ const BulletPoint: React.FC = () => {
               2
             </p>
           </Link>
-          <Link to="/whenwhere">
+          <Link to={count.thirdForm && "/whenwhere"}>
             <p
               className={`w-9 h-[34px] rounded-full text-base leading-6 font-bold text-white flex justify-center items-center ${
                 Object.entries(count.thirdForm).length
