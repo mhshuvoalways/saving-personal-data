@@ -6,23 +6,23 @@ import { RootState } from "../../store";
 const BulletPoint: React.FC = () => {
   const [percentage, setPercentage] = useState(0);
 
-  const count = useSelector((state: RootState) => state.formFeature);
+  const forms = useSelector((state: RootState) => state.formFeature);
+
+  const isFirstForm = Object.entries(forms.firstForm).length;
+  const isSecondForm = Object.entries(forms.secondForm).length;
+  const isThirdForm = Object.entries(forms.thirdForm).length;
 
   useEffect(() => {
-    if (
-      Object.entries(count.thirdForm).length &&
-      Object.entries(count.secondForm).length &&
-      Object.entries(count.firstForm).length
-    ) {
+    if (isThirdForm && isSecondForm && isFirstForm) {
       setPercentage(100);
-    } else if (Object.entries(count.thirdForm).length) {
+    } else if (isThirdForm) {
       setPercentage(100);
-    } else if (Object.entries(count.secondForm).length) {
+    } else if (isSecondForm) {
       setPercentage(100);
-    } else if (Object.entries(count.firstForm).length) {
+    } else if (isFirstForm) {
       setPercentage((100 / 2) * 1);
     }
-  }, [count]);
+  }, [isFirstForm, isSecondForm, isThirdForm]);
 
   return (
     <div className="bg-gradient-to-l bg-gray-200 h-[5px] w-[56.76%] mx-auto relative mt-9">
@@ -36,31 +36,25 @@ const BulletPoint: React.FC = () => {
           <Link to="/">
             <p
               className={`w-9 h-[34px] rounded-full text-base leading-6 font-bold text-white flex justify-center items-center ${
-                Object.entries(count.firstForm).length
-                  ? "bulet-point"
-                  : "bg-gray-200"
+                isFirstForm ? "bulet-point" : "bg-gray-200"
               }`}
             >
               1
             </p>
           </Link>
-          <Link to={count.secondForm && "/personalproject"}>
+          <Link to={isSecondForm ? "/personalproject" : ""}>
             <p
               className={`w-9 h-[34px] rounded-full text-base leading-6 font-bold text-white flex justify-center items-center ${
-                Object.entries(count.secondForm).length
-                  ? "bulet-point"
-                  : "bg-gray-200"
+                isSecondForm ? "bulet-point" : "bg-gray-200"
               }`}
             >
               2
             </p>
           </Link>
-          <Link to={count.thirdForm && "/whenwhere"}>
+          <Link to={isThirdForm ? "/whenwhere" : ""}>
             <p
               className={`w-9 h-[34px] rounded-full text-base leading-6 font-bold text-white flex justify-center items-center ${
-                Object.entries(count.thirdForm).length
-                  ? "bulet-point"
-                  : "bg-gray-200"
+                isThirdForm ? "bulet-point" : "bg-gray-200"
               }`}
             >
               3
