@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormCard from "./FormCard";
@@ -9,6 +9,7 @@ import DatePickerField from "./inputs/DatePickerField";
 import Radio from "./inputs/radio";
 import Button from "./inputs/Button";
 import { personalInfo } from "../../store/features/formFeatures";
+import useFormCheck from "../../hooks/useFormCheck";
 
 interface FormValues {
   firstName: string;
@@ -18,6 +19,7 @@ interface FormValues {
 }
 
 const Index: React.FC = () => {
+  const [imageData, setImageData] = useState<string | undefined>();
   const [image, setImage] = useState<File[]>([]);
   const [formValues, setFormValues] = useState<FormValues>({
     firstName: "",
@@ -29,6 +31,8 @@ const Index: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { forms, isFirstForm } = useFormCheck();
+
   const onChangeForm = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -36,25 +40,52 @@ const Index: React.FC = () => {
     });
   };
 
-  const formSubmit = () => {
+  const formSubmit = (value: string) => {
     if (formValues.firstName) {
       const obj = {
-        image: image,
+        image: imageData || "",
         firstName: formValues.firstName,
         lastName: formValues.lastName,
         birthDate: formValues.birthDate,
         gender: formValues.gender,
       };
       dispatch(personalInfo(obj));
-      navigate("/personalproject");
+      value !== "save" && navigate("/personalproject");
     }
   };
+
+  useEffect(() => {
+    if (image.length) {
+      const result = new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(image[0]);
+      });
+      result.then((res) => setImageData(res)).catch((err) => console.log(err));
+    }
+  }, [image]);
+
+  useEffect(() => {
+    if (isFirstForm) {
+      setImageData(forms.firstForm.image);
+      setFormValues({
+        firstName: forms.firstForm.firstName,
+        lastName: forms.firstForm.lastName,
+        birthDate: forms.firstForm.birthDate,
+        gender: forms.firstForm.gender,
+      });
+    }
+  }, [forms, isFirstForm]);
 
   return (
     <form>
       <FormCard>
         <>
-          <UserPhotoForm image={image} setImage={setImage} />
+          <UserPhotoForm
+            image={image}
+            setImage={setImage}
+            imageData={imageData}
+          />
           <PhotoExample />
           <div className="mt-[78px]">
             <InputField

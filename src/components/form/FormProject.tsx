@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormCard from "./FormCard";
@@ -7,6 +7,7 @@ import InputField from "./inputs/InputField";
 import TextAreaField from "./inputs/TextAreaField";
 import Button from "./inputs/Button";
 import { projectInfo } from "../../store/features/formFeatures";
+import useFormCheck from "../../hooks/useFormCheck";
 
 interface FormValues {
   title: string;
@@ -32,6 +33,8 @@ const Index: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { forms, isSecondForm } = useFormCheck();
+
   const onChangeInputForm = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -46,7 +49,7 @@ const Index: React.FC = () => {
     });
   };
 
-  const formSubmit = () => {
+  const formSubmit = (value: string) => {
     if (
       formValues.title &&
       formValues.shortDescription &&
@@ -63,9 +66,23 @@ const Index: React.FC = () => {
         specialty: formValues.specialty,
       };
       dispatch(projectInfo(obj));
-      navigate("/whenwhere");
+      value !== "save" && navigate("/whenwhere");
     }
   };
+
+  useEffect(() => {
+    if (isSecondForm) {
+      setFormValues({
+        title: forms.secondForm.title,
+        shortDescription: forms.secondForm.shortDescription,
+        whoWeAre: forms.secondForm.whoWeAre,
+        goal: forms.secondForm.goal,
+        targetAudience: forms.secondForm.targetAudience,
+        whatWeDo: forms.secondForm.whatWeDo,
+        specialty: forms.secondForm.specialty,
+      });
+    }
+  }, [forms, isSecondForm]);
 
   return (
     <form>

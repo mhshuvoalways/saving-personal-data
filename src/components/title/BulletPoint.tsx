@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { RootState } from "../../store";
+import useFormCheck from "../../hooks/useFormCheck";
 
 const BulletPoint: React.FC = () => {
   const [percentage, setPercentage] = useState(0);
-
-  const forms = useSelector((state: RootState) => state.formFeature);
-
-  const isFirstForm = Object.entries(forms.firstForm).length;
-  const isSecondForm = Object.entries(forms.secondForm).length;
-  const isThirdForm = Object.entries(forms.thirdForm).length;
+  const { isFirstForm, isSecondForm, isThirdForm } = useFormCheck();
 
   useEffect(() => {
     if (isThirdForm && isSecondForm && isFirstForm) {
@@ -42,7 +36,7 @@ const BulletPoint: React.FC = () => {
               1
             </p>
           </Link>
-          <Link to={isSecondForm ? "/personalproject" : ""}>
+          <Link to={isFirstForm ? "/personalproject" : ""}>
             <p
               className={`w-9 h-[34px] rounded-full text-base leading-6 font-bold text-white flex justify-center items-center ${
                 isSecondForm ? "bulet-point" : "bg-gray-200"
@@ -51,7 +45,7 @@ const BulletPoint: React.FC = () => {
               2
             </p>
           </Link>
-          <Link to={isThirdForm ? "/whenwhere" : ""}>
+          <Link to={isFirstForm && isSecondForm ? "/whenwhere" : ""}>
             <p
               className={`w-9 h-[34px] rounded-full text-base leading-6 font-bold text-white flex justify-center items-center ${
                 isThirdForm ? "bulet-point" : "bg-gray-200"

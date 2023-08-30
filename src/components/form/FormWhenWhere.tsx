@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -13,6 +13,7 @@ import PhotoForm from "./upload/PhotoForm";
 import Tags from "./tags";
 import Button from "./inputs/Button";
 import { whenWhereInfo } from "../../store/features/formFeatures";
+import useFormCheck from "../../hooks/useFormCheck";
 
 interface FormValues {
   timeSchedule: string;
@@ -54,10 +55,23 @@ const selectArray: SelectOption[] = [
     id: 3,
     name: "Wechat",
   },
+  {
+    id: 4,
+    name: "QQ",
+  },
+  {
+    id: 5,
+    name: "FaceTime",
+  },
+  {
+    id: 6,
+    name: "Zoom",
+  },
 ];
 
 const Index: React.FC = () => {
   const [checkboxSelected, setCheckboxSelected] = useState<string[]>([]);
+  const [imageData, setImageData] = useState<string | undefined>();
   const [image, setImage] = useState<File[]>([]);
   const [formValues, setFormValues] = useState<FormValues>({
     timeSchedule: "",
@@ -79,9 +93,14 @@ const Index: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { forms, isThirdForm } = useFormCheck();
+
   const handleSelectChange = (index: number, value: string) => {
     const updatedValues = [...selectValues];
-    updatedValues[index].value = value;
+    updatedValues[index] = {
+      ...updatedValues[index],
+      value: value,
+    };
     setSelectValues(updatedValues);
   };
 
@@ -139,7 +158,7 @@ const Index: React.FC = () => {
     });
   };
 
-  const formSubmit = () => {
+  const formSubmit = (value: string) => {
     const obj = {
       timeSchedule: formValues.timeSchedule,
       street: formValues.street,
@@ -148,13 +167,41 @@ const Index: React.FC = () => {
       postalCode: formValues.postalCode,
       city: formValues.city,
       other: formValues.other,
-      image,
+      image: imageData || "",
       tagItems,
       selectValues,
     };
     dispatch(whenWhereInfo(obj));
-    navigate("/");
+    value !== "save" && navigate("/");
   };
+
+  useEffect(() => {
+    if (image.length) {
+      const result = new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(image[0]);
+      });
+      result.then((res) => setImageData(res)).catch((err) => console.log(err));
+    }
+  }, [image]);
+
+  useEffect(() => {
+    if (isThirdForm) {
+      setImageData(forms.thirdForm.image);
+      setFormValues({
+        timeSchedule: forms.thirdForm.timeSchedule,
+        street: forms.thirdForm.street,
+        number: forms.thirdForm.number,
+        roomNumber: forms.thirdForm.roomNumber,
+        postalCode: forms.thirdForm.postalCode,
+        city: forms.thirdForm.city,
+        other: forms.thirdForm.other,
+      });
+      setSelectValues(forms.thirdForm.selectValues);
+      setTagItems(forms.thirdForm.tagItems);
+    }
+  }, [forms, isThirdForm]);
 
   return (
     <form>
@@ -261,15 +308,22 @@ const Index: React.FC = () => {
               Select a cover image for you CAS Project
             </p>
           </div>
-          {image.length ? (
+          {imageData ? (
+            <img
+              src={imageData}
+              alt=""
+              className="bg-white h-[290px] shadow-md rounded-xl w-full"
+            />
+          ) : image.length ? (
             <img
               src={URL.createObjectURL(image[0])}
               alt=""
               className="bg-white h-[290px] shadow-md rounded-xl w-full"
             />
-          ) : (
+          ) : null}
+          {!imageData && image.length === 0 ? (
             <PhotoForm formHeight="290px" imageHandler={imageHandler} />
-          )}
+          ) : null}
           <Tags tagItems={tagItems} setTagItems={setTagItems} />
           <TextAreaField
             title="Other (optional)"

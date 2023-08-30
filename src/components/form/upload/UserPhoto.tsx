@@ -3,20 +3,26 @@ import UserImage from "../../../assets/images/icons/userphoto.svg";
 
 interface Props {
   image: File[];
+  imageData?: string;
 }
 
-const UserPhoto: React.FC<Props> = ({ image }) => {
+const UserPhoto: React.FC<Props> = ({ image, imageData }) => {
   return (
     <>
-      {image.length ? (
+      {imageData ? (
+        <img
+          src={imageData}
+          alt=""
+          className="w-full md:w-[191px] md:h-[180px] rounded-full shadow-md bg-white"
+        />
+      ) : image.length ? (
         <img
           src={URL.createObjectURL(image[0])}
           alt=""
           className="w-full md:w-[191px] md:h-[180px] rounded-full shadow-md bg-white"
         />
-      ) : (
-        <img src={UserImage} alt="" />
-      )}
+      ) : null}
+      {!imageData && image.length === 0 ? <img src={UserImage} alt="" /> : null}
     </>
   );
 };
