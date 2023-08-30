@@ -25,6 +25,10 @@ export interface FormState {
   };
   thirdForm: {
     timeSchedule: string;
+    meetingPlace: {
+      isOnline: boolean;
+      isInPerson: boolean;
+    };
     street: string;
     number: string;
     roomNumber: string;
@@ -57,6 +61,10 @@ type SecondFormPayload = {
 
 type ThirdFormPayload = {
   timeSchedule: string;
+  meetingPlace: {
+    isOnline: boolean;
+    isInPerson: boolean;
+  };
   street: string;
   number: string;
   roomNumber: string;
@@ -87,6 +95,10 @@ const initialState: FormState = {
   },
   thirdForm: {
     timeSchedule: "",
+    meetingPlace: {
+      isOnline: false,
+      isInPerson: false,
+    },
     street: "",
     number: "",
     roomNumber: "",

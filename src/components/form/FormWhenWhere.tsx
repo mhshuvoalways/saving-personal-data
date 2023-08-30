@@ -160,6 +160,10 @@ const Index: React.FC = () => {
   const formSubmit = (value: string) => {
     const obj = {
       timeSchedule: formValues.timeSchedule,
+      meetingPlace: {
+        isOnline: Boolean(checkboxSelected.includes("online")),
+        isInPerson: Boolean(checkboxSelected.includes("inperson")),
+      },
       street: formValues.street,
       number: formValues.number,
       roomNumber: formValues.roomNumber,
@@ -197,6 +201,11 @@ const Index: React.FC = () => {
         city: forms.thirdForm.city,
         other: forms.thirdForm.other,
       });
+      const findObj = {
+        isOnline: forms.thirdForm.meetingPlace.isOnline ? "online" : "",
+        isInperson: forms.thirdForm.meetingPlace.isInPerson ? "inperson" : "",
+      };
+      setCheckboxSelected(Object.values(findObj));
       setSelectValues(forms.thirdForm.selectValues);
       setTagItems(forms.thirdForm.tagItems);
     }
