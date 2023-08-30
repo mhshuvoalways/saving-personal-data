@@ -22,7 +22,7 @@ const TextAreaField: React.FC<Props> = ({
       <div className="relative">
         <img src={SearchIcon} className="absolute top-[25px] left-[22px]" />
         <ReactGoogleAutocomplete
-          apiKey="AIzaSyDv0LW8rdzKeKPjPWedHX5RJXV7rz1Ikic"
+          apiKey={import.meta.env.VITE_GOOGLE_API_KEY}
           onPlaceSelected={(place) => onChangeGoogle(place)}
           placeholder={placeholder}
           className="mt-[10px] outline-0 w-full h-[55px] rounded-2xl border-[#00000066] border-[1px] pl-[56px] pr-[22px] py-[17px]"

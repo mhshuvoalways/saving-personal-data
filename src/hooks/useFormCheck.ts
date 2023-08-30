@@ -1,6 +1,14 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
+interface ThirdForm {
+  timeSchedule: string;
+  meetingPlace: {
+    isOnline: boolean;
+    isInPerson: boolean;
+  };
+}
+
 const useFormCheck = () => {
   const forms = useSelector((state: RootState) => state.formFeature);
 
@@ -20,7 +28,11 @@ const useFormCheck = () => {
     }
   });
 
-  const isThirdForm = Object.values(forms.thirdForm).some((value) => {
+  const isThirdForm = Object.keys(forms.thirdForm).some((key) => {
+    if (key === "meetingPlace") {
+      return false;
+    }
+    const value = forms.thirdForm[key as keyof ThirdForm];
     if (Array.isArray(value)) {
       return value.length > 0;
     } else {
