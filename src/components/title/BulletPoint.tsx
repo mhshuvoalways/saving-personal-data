@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useFormCheck from "../../hooks/useFormCheck";
 
 const BulletPoint: React.FC = () => {
   const [percentage, setPercentage] = useState(0);
   const { isFirstForm, isSecondForm, isThirdForm } = useFormCheck();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isThirdForm && isSecondForm && isFirstForm) {
@@ -17,6 +19,12 @@ const BulletPoint: React.FC = () => {
       setPercentage((100 / 2) * 1);
     }
   }, [isFirstForm, isSecondForm, isThirdForm]);
+
+  useEffect(() => {
+    if (!isFirstForm && !isSecondForm && !isThirdForm) {
+      navigate("/");
+    }
+  }, [isFirstForm, isSecondForm, isThirdForm, navigate]);
 
   return (
     <div className="bg-gradient-to-l bg-gray-200 h-[5px] w-[56.76%] mx-auto relative mt-9">
