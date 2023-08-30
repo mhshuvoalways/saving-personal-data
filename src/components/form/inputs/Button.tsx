@@ -37,7 +37,6 @@ const Button: React.FC<Props> = ({ btn, formSubmit }) => {
         <motion.button
           whileTap={{ scale: 0.9 }}
           className="w-full sm:w-[91px] rounded-[38px] bg-gradient-to-l from-[#20FF87] to-[#00CC9E] text-white text-base leading-6 font-bold  text-center py-[5px] px-[27px]"
-          type="button"
           onClick={() => formSubmit("")}
         >
           Next

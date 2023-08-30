@@ -108,7 +108,6 @@ const Index: React.FC = () => {
     const remainingOptions = selectArray.filter(
       (option) => !selectValues.some((select) => select.value === option.name)
     );
-
     if (remainingOptions.length > 0) {
       const newSelect: SelectValue = {
         id: selectValues.length + 1,
